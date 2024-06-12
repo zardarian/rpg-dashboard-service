@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  rpg_dashboard_service:
+    container_name: rpg_dashboard_service
+    build: .
+    command: gunicorn rpg_dashboard_service.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8002:8000"
+    networks:
+      - docker-lebahbiru-network
+    env_file:
+      - .env
+
+  celery-worker:
+    build: .
+    command: celery -A rpg_dashboard_service worker --loglevel=info
+    volumes:
+      - .:/app
+    networks:
+      - docker-lebahbiru-network
+    env_file:
+      - .env
+
+  celery-beat:
+    build: .
+    command: celery -A rpg_dashboard_service beat --loglevel=info
+    volumes:
+      - .:/app
+    networks:
+      - docker-lebahbiru-network
+    env_file:
+      - .env
+
+networks:
+  docker-lebahbiru-network:
+    external: true

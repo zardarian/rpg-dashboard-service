@@ -148,6 +148,12 @@ REST_FRAMEWORK = {
 
 RPG_DATA_PROVIDER_ENDPOINT = env('RPG_DATA_PROVIDER_ENDPOINT')
 
+CELERY_BROKER_URL = 'redis://:{}@{}:{}/{}'.format(env('REDIS_PASSWORD'), env('REDIS_ADDRESS'), env('REDIS_PORT'), env('REDIS_INDEX'))
+CELERY_RESULT_BACKEND = 'redis://:{}@{}:{}/{}'.format(env('REDIS_PASSWORD'), env('REDIS_ADDRESS'), env('REDIS_PORT'), env('REDIS_INDEX'))
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Jakarta'
 CELERY_BEAT_SCHEDULE = {
     'fetch-events-data-daily': {
         'task': 'rpg_dashboard_service_app.tasks.daily_fetch_data',
@@ -155,37 +161,6 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(minute='*'),
     },
 }
-
-# CELERY_IMPORTS = (
-#     'rpg_dashboard_service_app.integrations.rpg_data_provider.daily_fetch_data',
-# )
-
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'console': {
-#             'class': 'logging.StreamHandler',
-#         },
-#         'file': {
-#             'level': 'DEBUG',
-#             'class': 'logging.FileHandler',
-#             'filename': 'celery.log',
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['console'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#         'celery': {
-#             'handlers': ['console', 'file'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#     },
-# }
 
 REDIS_ADDRESS = env('REDIS_ADDRESS')
 REDIS_PORT = env('REDIS_PORT')
