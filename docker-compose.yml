@@ -9,8 +9,6 @@ services:
       - .:/app
     ports:
       - "8002:8000"
-    networks:
-      - docker-lebahbiru-network
     env_file:
       - .env
 
@@ -19,8 +17,6 @@ services:
     command: celery -A rpg_dashboard_service worker --loglevel=info
     volumes:
       - .:/app
-    networks:
-      - docker-lebahbiru-network
     env_file:
       - .env
 
@@ -29,11 +25,5 @@ services:
     command: celery -A rpg_dashboard_service beat --loglevel=info
     volumes:
       - .:/app
-    networks:
-      - docker-lebahbiru-network
     env_file:
       - .env
-
-networks:
-  docker-lebahbiru-network:
-    external: true
